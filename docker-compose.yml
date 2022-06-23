@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    container_name: metalite_db_container
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports: 
+      - "4000:80"
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - PMA_HOST
+      - PMA_USER
+      - PMA_PASSWORD
+    depends_on:
+      - db
+  metalite_backend:
+    build: .
+    restart: always
+    container_name: metalite_be_container
+    volumes:
+      - .:/app
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_HOST
+      - MYSQL_PORT
+      - ALLOWED_HOST
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  metalite_frontend:
+    build:
+      context: "../metalite_fe"
+    volumes:
+      - ${FRONTEND_WORKING_DIR}:/vue/app
+    ports:
+      - "9000:9000"
+volumes:
+  mysql-data:
