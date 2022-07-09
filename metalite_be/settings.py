@@ -35,7 +35,11 @@ CORS_ALLOWED_ORIGINS = [
 DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
     'LOGIN_FIELD': 'email',
-    'USER_ID_FIELD': 'username'
+    'USER_ID_FIELD': 'username',
+    'SERIALIZERS': {
+        'user': 'users.serializers.UserSerializer',
+        'current_user': 'users.serializers.UserSerializer',
+    }
 }
 
 REST_FRAMEWORK = {
@@ -62,7 +66,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'users',
-    'posts'
+    'posts',
+    'likes'
 ]
 
 MIDDLEWARE = [
