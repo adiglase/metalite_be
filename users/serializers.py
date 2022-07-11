@@ -8,6 +8,7 @@ class CustomUserSerializer(UserSerializer):
     posts = serializers.SerializerMethodField()
     total_posts = serializers.SerializerMethodField()
     is_followed = serializers.SerializerMethodField()
+    is_current_user = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
         fields = '__all__'
@@ -23,6 +24,11 @@ class CustomUserSerializer(UserSerializer):
     def get_is_followed(self, obj):
         user = self.context.get('request').user
         return obj.followers.filter(follower=user).exists()
+
+    def get_is_current_user(self, obj):
+        request = self.context.get('request')
+
+        return obj.id == request.user.id
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
