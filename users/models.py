@@ -35,7 +35,7 @@ username_validator = RegexValidator(regex=r'^\S*$', message='Username should not
 
 
 def upload_to(instance, filename):
-    return f'posts/{filename}'.format(filename=filename)
+    return f'profiles/{filename}'.format(filename=filename)
 
 
 class User(AbstractBaseUser, PermissionsMixin):

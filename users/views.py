@@ -1,14 +1,12 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
 
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 
 User = get_user_model()
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
     queryset = User.objects.filter(is_staff=False)
 

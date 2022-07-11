@@ -37,8 +37,8 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_ID_FIELD': 'username',
     'SERIALIZERS': {
-        'user': 'users.serializers.UserSerializer',
-        'current_user': 'users.serializers.UserSerializer',
+        'user': 'users.serializers.CustomUserSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
     }
 }
 
@@ -151,6 +151,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+# Hacky things
+# TODO: To not using this anymore
+HOME_URL = 'http://localhost:8000'
+
 
 STATIC_URL = 'static/'
 

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from follows.models import Follow
 from follows.serializers import FollowSerializer, AddFollowSerializer
-from users.serializers import UserSerializer
+from users.serializers import CustomUserSerializer
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -22,7 +22,7 @@ class FollowViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
 
         following_id = serializer.validated_data.get('following')
-        return Response(UserSerializer(following_id, context={'request': request}).data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(CustomUserSerializer(following_id, context={'request': request}).data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         following_id = serializer.validated_data.get('following')
@@ -30,6 +30,6 @@ class FollowViewSet(viewsets.ModelViewSet):
 
         if followed:
             followed.delete()
-            return Response(UserSerializer(following_id, context={'request': self.request}).data, status=status.HTTP_204_NO_CONTENT)
+            return Response(CustomUserSerializer(following_id, context={'request': self.request}).data, status=status.HTTP_204_NO_CONTENT)
 
         serializer.save(follower=self.request.user)
