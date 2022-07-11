@@ -17,9 +17,9 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, username, full_name, password, gender, **other_fields)
 
-    def create_user(self, email, username, full_name, password, gender, **other_fields):
+    def create_user(self, image, email, username, full_name, password, gender, **other_fields):
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username, full_name=full_name, gender=gender, **other_fields)
+        user = self.model(image=image, email=email, username=username, full_name=full_name, gender=gender, **other_fields)
         user.set_password(password)
         user.save()
         return user
@@ -34,7 +34,12 @@ username_validator = RegexValidator(regex=r'^\S*$', message='Username should not
                                     code='invalid_username')
 
 
+def upload_to(instance, filename):
+    return f'posts/{filename}'.format(filename=filename)
+
+
 class User(AbstractBaseUser, PermissionsMixin):
+    image = models.ImageField("Image", upload_to=upload_to)
     email = models.EmailField('Email', unique=True)
     username = models.CharField(max_length=50, unique=True, validators=[username_validator])
     full_name = models.CharField(max_length=100)
@@ -46,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'full_name', 'gender']
+    REQUIRED_FIELDS = ['image', 'email', 'full_name', 'gender']
 
     def __str__(self):
         return self.username

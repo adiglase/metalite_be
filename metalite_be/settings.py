@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'djoser',
     'users',
     'posts',
-    'likes'
+    'likes',
+    'follows'
 ]
 
 MIDDLEWARE = [
