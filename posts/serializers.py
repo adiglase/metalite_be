@@ -34,3 +34,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_user_username(self, obj):
         return obj.created_by.username
+
+
+class PostDetailSerializer(PostSerializer):
+    class Meta(PostSerializer.Meta):
+        fields = PostSerializer.Meta.fields + ['comments']
