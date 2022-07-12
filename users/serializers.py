@@ -7,6 +7,8 @@ from posts.serializers import PostSerializer
 class CustomUserSerializer(UserSerializer):
     posts = serializers.SerializerMethodField()
     total_posts = serializers.SerializerMethodField()
+    total_followers = serializers.SerializerMethodField()
+    total_following = serializers.SerializerMethodField()
     is_followed = serializers.SerializerMethodField()
     is_current_user = serializers.SerializerMethodField()
 
@@ -29,6 +31,12 @@ class CustomUserSerializer(UserSerializer):
         request = self.context.get('request')
 
         return obj.id == request.user.id
+
+    def get_total_followers(self, obj):
+        return obj.followers.count()
+
+    def get_total_following(self, obj):
+        return obj.following.count()
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
