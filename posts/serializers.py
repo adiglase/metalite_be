@@ -9,11 +9,12 @@ class PostSerializer(serializers.ModelSerializer):
     user_full_name = serializers.SerializerMethodField()
     user_username = serializers.SerializerMethodField()
     total_likes = serializers.SerializerMethodField()
+    total_comments = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField(method_name='get_is_liked')
 
     class Meta:
         model = Post
-        fields = ['description', 'id', 'image', 'created_at', 'total_likes', 'is_liked', 'user_image', 'user_full_name', 'user_username']
+        fields = ['description', 'id', 'image', 'created_at', 'total_likes', 'is_liked', 'user_image', 'user_full_name', 'user_username', 'total_comments']
         read_only_fields = (
             "created_by",
             "created_at"
@@ -25,6 +26,9 @@ class PostSerializer(serializers.ModelSerializer):
     def get_is_liked(self, obj):
         user = self.context.get('request').user
         return obj.likes.filter(user=user).exists()
+
+    def get_total_comments(self, obj):
+        return obj.comments.count()
 
     def get_user_image(self, obj):
         return settings.HOME_URL + obj.created_by.image.url if obj.created_by.image else None
