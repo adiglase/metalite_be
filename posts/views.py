@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -13,6 +14,12 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     parser_classes = [MultiPartParser, FormParser]
+
+    def get_queryset(self):
+        current_user = self.request.user
+        current_user_following_ids = current_user.following.values_list('following', flat=True)
+        posts = Post.objects.filter(Q(created_by__in=current_user_following_ids) | Q(created_by=current_user))
+        return posts
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
