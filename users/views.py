@@ -21,7 +21,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         users = User.objects.exclude(
             id__in=current_user_following_ids).exclude(
             is_staff__exact=True).exclude(
-            id__exact=12).order_by('?')[:5]
+            id__exact=request.user.id).order_by('?')[:5]
 
         serializer = CustomUserSerializer(users, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
